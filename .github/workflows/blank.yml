@@ -1,0 +1,22 @@
+name: ADMIN DEV CI&CD setup
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: "build/*"
+          remote_path: ${{ secrets.DESTINATION_DEV }}
+          remote_host: ${{ secrets.IP_DEV }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.PEM_DEV }}
